@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 //@Service
+@Transactional
 public class MemberService {
 
     //private  final MemberRepository memberRepository = new MemoryMemberRepository();
@@ -25,16 +28,15 @@ public class MemberService {
      * 회원 가입
      */
     public Long join(Member member){
-        // 같은 이름이 있는 중복회원 X
+    		// 같은 이름이 있는 중복회원 X
+//          Optional<Member> result = memberRepository.findByName(member.getName());
+//          result.ifPresent(m ->{
+//              throw new IllegalStateException("이미 존재하는 회원입니다.");
+//          });
+          validateDuplicateMember(member); // 중복회원 검증
 
-//        Optional<Member> result = memberRepository.findByName(member.getName());
-//        result.ifPresent(m ->{
-//            throw new IllegalStateException("이미 존재하는 회원입니다.");
-//        });
-        validateDuplicateMember(member); // 중복회원 검증
-
-        memberRepository.save(member);
-        return member.getId();
+          memberRepository.save(member);
+          return member.getId();
     }
 
     /**
